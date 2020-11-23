@@ -9,11 +9,20 @@ const messagesDiv = document.getElementById('messages');
 
 // Templates
 const messageTemplate = document.getElementById('message-template').innerHTML;
+const locationMessageTemplate = document.getElementById(
+    'location-message-template'
+).innerHTML;
 
-// Send message
+// Send message in chat
 socket.on('message', (message) => {
     // console.log(message);
     const html = Mustache.render(messageTemplate, { message });
+    messagesDiv.insertAdjacentHTML('beforeend', html);
+});
+
+// Send location in chat
+socket.on('locationMessage', (locationURL) => {
+    const html = Mustache.render(locationMessageTemplate, { locationURL });
     messagesDiv.insertAdjacentHTML('beforeend', html);
 });
 
@@ -50,14 +59,13 @@ sendLocationBtn.addEventListener('click', () => {
     sendLocationBtn.disabled = true;
     // Get location
     navigator.geolocation.getCurrentPosition((position) => {
-        // console.log(position);
         socket.emit(
             'sendLocation',
             {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
             },
-            (message) => {
+            () => {
                 // Client side acknowledgment
                 console.log('Location shared!');
                 sendLocationBtn.disabled = false;
