@@ -21,3 +21,21 @@ messageForm.addEventListener('submit', (e) => {
     // Clear input
     messageInput.value = '';
 });
+
+// Send location
+const sendLocationBtn = document.getElementById('send-location');
+sendLocationBtn.addEventListener('click', () => {
+    // If browser doesn't support Geolocation
+    if (!navigator.geolocation) {
+        return alert(`Sorry, Geolocation feature isn't by your browser!`);
+    }
+
+    // Get location
+    navigator.geolocation.getCurrentPosition((position) => {
+        // console.log(position);
+        socket.emit('sendLocation', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+        });
+    });
+});
