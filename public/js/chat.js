@@ -1,40 +1,47 @@
 const socket = io();
 
+// Elements
+const messageFormEl = document.getElementById('message-form');
+const messageInputEl = document.getElementById('message-input');
+const messageFormSendBtn = document.getElementById('message-send-btn');
+const sendLocationBtn = document.getElementById('send-location-btn');
+
+// Send message
 socket.on('message', (message) => {
     console.log(message);
 });
 
-const messageForm = document.getElementById('message-form');
-
-messageForm.addEventListener('submit', (e) => {
+// Event Listener: Message element
+messageFormEl.addEventListener('submit', (e) => {
     e.preventDefault();
-    const messageInput = e.target.elements.message;
-
-    // If message input is empty then do nothing
-    if (!messageInput) {
-        return;
+    // Run only if input isn't empty
+    if (messageInputEl.value !== '') {
+        // Disable send buton while processing
+        messageFormSendBtn.disabled = true;
+        // Send message to server
+        socket.emit('sendMessage', messageInputEl.value, (error) => {
+            // Enable send button
+            messageFormSendBtn.disabled = false;
+            // Clear input
+            messageInputEl.value = '';
+            messageInputEl.focus();
+            // Check if there's an error
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message delivered!');
+        });
     }
-
-    // Send message to server
-    socket.emit('sendMessage', messageInput.value, (error) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message delivered!');
-    });
-
-    // Clear input
-    messageInput.value = '';
 });
 
-// Send location
-const sendLocationBtn = document.getElementById('send-location');
+// Event Listener: Send location
 sendLocationBtn.addEventListener('click', () => {
     // If browser doesn't support Geolocation
     if (!navigator.geolocation) {
         return alert(`Sorry, Geolocation feature isn't by your browser!`);
     }
-
+    // Disable location button spamming
+    sendLocationBtn.disabled = true;
     // Get location
     navigator.geolocation.getCurrentPosition((position) => {
         // console.log(position);
@@ -47,6 +54,7 @@ sendLocationBtn.addEventListener('click', () => {
             (message) => {
                 // Client side acknowledgment
                 console.log('Location shared!');
+                sendLocationBtn.disabled = false;
             }
         );
     });
