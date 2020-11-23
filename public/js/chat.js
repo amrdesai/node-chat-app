@@ -15,8 +15,13 @@ messageForm.addEventListener('submit', (e) => {
         return;
     }
 
-    // Else send msg to server
-    socket.emit('sendMessage', messageInput.value);
+    // Send message to server
+    socket.emit('sendMessage', messageInput.value, (error) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message delivered!');
+    });
 
     // Clear input
     messageInput.value = '';
@@ -33,9 +38,16 @@ sendLocationBtn.addEventListener('click', () => {
     // Get location
     navigator.geolocation.getCurrentPosition((position) => {
         // console.log(position);
-        socket.emit('sendLocation', {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-        });
+        socket.emit(
+            'sendLocation',
+            {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+            },
+            (message) => {
+                // Client side acknowledgment
+                console.log('Location shared!');
+            }
+        );
     });
 });
