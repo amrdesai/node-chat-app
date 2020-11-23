@@ -5,10 +5,16 @@ const messageFormEl = document.getElementById('message-form');
 const messageInputEl = document.getElementById('message-input');
 const messageFormSendBtn = document.getElementById('message-send-btn');
 const sendLocationBtn = document.getElementById('send-location-btn');
+const messagesDiv = document.getElementById('messages');
+
+// Templates
+const messageTemplate = document.getElementById('message-template').innerHTML;
 
 // Send message
 socket.on('message', (message) => {
-    console.log(message);
+    // console.log(message);
+    const html = Mustache.render(messageTemplate, { message });
+    messagesDiv.insertAdjacentHTML('beforeend', html);
 });
 
 // Event Listener: Message element
