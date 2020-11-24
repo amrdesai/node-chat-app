@@ -4,6 +4,7 @@ const http = require('http');
 const path = require('path');
 const socketio = require('socket.io');
 const Filter = require('bad-words');
+const { generateMessage } = require('./utils/messages');
 
 const app = express();
 const server = http.createServer(app);
@@ -21,10 +22,13 @@ io.on('connection', (socket) => {
     console.log('New WebSocket Connection');
 
     // Welcome message for current connection
-    socket.emit('message', 'Welcome!');
+    socket.emit('message', generateMessage('Welcome!'));
 
     // Message broadcast when user joins the room (boradcast for everyone except current user)
-    socket.broadcast.emit('message', 'A new user has joined the room');
+    socket.broadcast.emit(
+        'message',
+        generateMessage('A new user has joined the room')
+    );
 
     // Send chat message
     socket.on('sendMessage', (message, callback) => {
@@ -33,8 +37,8 @@ io.on('connection', (socket) => {
             return callback('Profanity is not allowed!');
         }
 
-        // send message to everyone
-        io.emit('message', message);
+        // Send user's message to all connected users
+        io.emit('message', generateMessage(message));
 
         // Server side acknowledgment
         callback();
@@ -51,9 +55,9 @@ io.on('connection', (socket) => {
         callback();
     });
 
-    // Disconnect Message
+    // Message when someone disconnects the chatroom
     socket.on('disconnect', () => {
-        io.emit('message', 'A user has left');
+        io.emit('message', generateMessage('A user has left'));
     });
 });
 

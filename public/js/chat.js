@@ -15,8 +15,11 @@ const locationMessageTemplate = document.getElementById(
 
 // Send message in chat
 socket.on('message', (message) => {
-    // console.log(message);
-    const html = Mustache.render(messageTemplate, { message });
+    console.log(message);
+    const html = Mustache.render(messageTemplate, {
+        message: message.text,
+        createdAt: moment(message.createdAt).format('h:mm A'),
+    });
     messagesDiv.insertAdjacentHTML('beforeend', html);
 });
 
