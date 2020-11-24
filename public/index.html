@@ -10,57 +10,20 @@
 </head>
 
 <body>
-    <!-- <h1>Chat App</h1> -->
+    <div class="centered-form">
+        <div class="centered-form__box">
+            <h1>Join</h1>
+            <form action="/chat.html">
+                <label for="username">Display name</label>
+                <input name="username" type="text" placeholder="Display name" required>
 
-    <div class="chat">
-        <div class="chat__sidebar">
-        </div>
+                <label for="">Room</label>
+                <input name="room" type="text" placeholder="Room" required>
 
-        <div class="chat__main">
-            <!-- Chat Box -->
-            <div id="messages" class="chat__messages"></div>
-            <!-- Chat Form -->
-            <div class="compose">
-                <form id='message-form'>
-                    <input id='message-input' name='message-input' placeholder="Message" type="text">
-                    <button id="message-send-btn">Send</button>
-                </form>
-                <!-- Send Location Button -->
-                <button id="send-location-btn">Send Location</button>
-            </div>
+                <button>Join</button>
+            </form>
         </div>
     </div>
-
-
-    <!-- Message Template -->
-    <script id='message-template' type='text/html'>
-        <div class='message'>
-            <p>
-                <span class='message__name'>Billu</span>
-                <span class='message__meta'>{{createdAt}}</span>
-            </p>
-            <p>{{message}}</p>
-        </div>
-    </script>
-
-    <!-- Location Message Template -->
-    <script id='location-message-template' type='text/html'>
-        <div class='message'>
-            <p>
-                <span class='message__name'>Billu</span>
-                <span class='message__meta'>{{createdAt}}</span>
-            </p>
-            <a href="{{location}}" target="_black">My current location</a>
-        </div>
-    </script>
-
-
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="js/chat.js"></script>
 </body>
 
 </html>
