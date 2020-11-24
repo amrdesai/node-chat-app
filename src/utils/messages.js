@@ -1,3 +1,4 @@
+// Generate Message
 const generateMessage = (text) => {
     return {
         text,
@@ -5,4 +6,12 @@ const generateMessage = (text) => {
     };
 };
 
-module.exports = { generateMessage };
+// Generate Location Message
+const generateLocationMessage = (location) => {
+    return {
+        url: `https://google.com/maps?q=${location.latitude},${location.longitude}`,
+        createdAt: new Date().getTime(),
+    };
+};
+
+module.exports = { generateMessage, generateLocationMessage };

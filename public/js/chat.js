@@ -24,8 +24,11 @@ socket.on('message', (message) => {
 });
 
 // Send location in chat
-socket.on('locationMessage', (locationURL) => {
-    const html = Mustache.render(locationMessageTemplate, { locationURL });
+socket.on('locationMessage', (location) => {
+    const html = Mustache.render(locationMessageTemplate, {
+        location: location.url,
+        createdAt: moment(location.createdAt).format('h:mm A'),
+    });
     messagesDiv.insertAdjacentHTML('beforeend', html);
 });
 
