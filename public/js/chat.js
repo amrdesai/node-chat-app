@@ -25,6 +25,7 @@ socket.on('message', (message) => {
 
 // Send location in chat
 socket.on('locationMessage', (location) => {
+    console.log(location);
     const html = Mustache.render(locationMessageTemplate, {
         location: location.url,
         createdAt: moment(location.createdAt).format('h:mm A'),
@@ -73,7 +74,7 @@ sendLocationBtn.addEventListener('click', () => {
             },
             () => {
                 // Client side acknowledgment
-                console.log('Location shared!');
+                // console.log('Location shared!');
                 sendLocationBtn.disabled = false;
             }
         );

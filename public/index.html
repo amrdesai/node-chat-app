@@ -5,36 +5,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
+    <link rel="icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
-    <h1>Chat App</h1>
+    <!-- <h1>Chat App</h1> -->
 
-    <!-- Chat Box -->
-    <div id="messages">
+    <div class="chat">
+        <div class="chat__sidebar">
+        </div>
 
+        <div class="chat__main">
+            <!-- Chat Box -->
+            <div id="messages" class="chat__messages"></div>
+            <!-- Chat Form -->
+            <div class="compose">
+                <form id='message-form'>
+                    <input id='message-input' name='message-input' placeholder="Message" type="text">
+                    <button id="message-send-btn">Send</button>
+                </form>
+                <!-- Send Location Button -->
+                <button id="send-location-btn">Send Location</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Chat Form -->
-    <form id='message-form'>
-        <input id='message-input' name='message-input' placeholder="Message" type="text">
-        <button id="message-send-btn">Send</button>
-    </form>
-
-    <!-- Send Location Button -->
-    <button id="send-location-btn">Send Location</button><br />
 
     <!-- Message Template -->
     <script id='message-template' type='text/html'>
-        <div>
-            <p>{{createdAt}} - {{message}}</p>
+        <div class='message'>
+            <p>
+                <span class='message__name'>Billu</span>
+                <span class='message__meta'>{{createdAt}}</span>
+            </p>
+            <p>{{message}}</p>
         </div>
     </script>
 
     <!-- Location Message Template -->
     <script id='location-message-template' type='text/html'>
-        <div>
-            <a href="{{locationURL}}" target="_black">{{createdAt}} - My current location</a>
+        <div class='message'>
+            <p>
+                <span class='message__name'>Billu</span>
+                <span class='message__meta'>{{createdAt}}</span>
+            </p>
+            <a href="{{location}}" target="_black">My current location</a>
         </div>
     </script>
 
