@@ -24,14 +24,21 @@ app.use(express.static(publicDirectoryPath));
 io.on('connection', (socket) => {
     console.log('New WebSocket Connection');
 
-    // Welcome message for current connection
-    socket.emit('message', generateMessage('Welcome!'));
+    // Join cht room
+    socket.on('join', ({ username, room }) => {
+        socket.join(room);
 
-    // Message broadcast when user joins the room (boradcast for everyone except current user)
-    socket.broadcast.emit(
-        'message',
-        generateMessage('A new user has joined the room')
-    );
+        // Send welcome message for current client connection
+        socket.emit('message', generateMessage('Welcome!'));
+
+        // Message broadcast when user joins the room (boradcast for everyone except current user)
+        socket.broadcast
+            .to(room)
+            .emit(
+                'message',
+                generateMessage(`${username} has joined the room.`)
+            );
+    });
 
     // Send chat message
     socket.on('sendMessage', (message, callback) => {
@@ -41,7 +48,7 @@ io.on('connection', (socket) => {
         }
 
         // Send user's message to all connected users
-        io.emit('message', generateMessage(message));
+        io.to('cat').emit('message', generateMessage(message));
 
         // Server side acknowledgment
         callback();

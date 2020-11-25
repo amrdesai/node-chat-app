@@ -13,6 +13,11 @@ const locationMessageTemplate = document.getElementById(
     'location-message-template'
 ).innerHTML;
 
+// Options
+const { username, room } = Qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+});
+
 // Send message in chat
 socket.on('message', (message) => {
     console.log(message);
@@ -80,3 +85,6 @@ sendLocationBtn.addEventListener('click', () => {
         );
     });
 });
+
+// Join a chat room
+socket.emit('join', { username, room });
