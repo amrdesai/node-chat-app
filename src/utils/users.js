@@ -26,11 +26,11 @@ const addUser = ({ id, username, room }) => {
     }
 
     // Store user
-    const newUser = { id, username, room };
-    users.push(newUser);
+    const user = { id, username, room };
+    users.push(user);
 
     return {
-        newUser,
+        user,
     };
 };
 
