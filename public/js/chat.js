@@ -19,6 +19,30 @@ const { username, room } = Qs.parse(location.search, {
     ignoreQueryPrefix: true,
 });
 
+// Auto-scroll function
+const autoscroll = () => {
+    // New message element
+    const newMessageEl = messagesDiv.lastElementChild;
+
+    // Height of the new message
+    const newMessageStyles = getComputedStyle(newMessageEl);
+    const newMessageMargin = parseInt(newMessageStyles.marginBottom);
+    const newMessageHeight = newMessageEl.offsetHeight + newMessageMargin;
+
+    // Visible height
+    const visibleHeight = messagesDiv.offsetHeight;
+
+    // Height of messages container
+    const containerHeight = messagesDiv.scrollHeight;
+
+    // How far have I scrolled?
+    const scrollOffset = messagesDiv.scrollTop + visibleHeight;
+
+    if (containerHeight - newMessageHeight <= scrollOffset) {
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+};
+
 // Send message in chat
 socket.on('message', (message) => {
     const html = Mustache.render(messageTemplate, {
@@ -27,6 +51,7 @@ socket.on('message', (message) => {
         createdAt: moment(message.createdAt).format('h:mm A'),
     });
     messagesDiv.insertAdjacentHTML('beforeend', html);
+    autoscroll();
 });
 
 // Send location in chat
@@ -37,6 +62,7 @@ socket.on('locationMessage', (location) => {
         createdAt: moment(location.createdAt).format('h:mm A'),
     });
     messagesDiv.insertAdjacentHTML('beforeend', html);
+    autoscroll();
 });
 
 //
@@ -64,7 +90,6 @@ messageFormEl.addEventListener('submit', (e) => {
             if (error) {
                 return console.log(error);
             }
-            console.log('Message delivered!');
         });
     }
 });
