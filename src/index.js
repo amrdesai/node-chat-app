@@ -41,7 +41,10 @@ io.on('connection', (socket) => {
         socket.join(user.room);
 
         // Send welcome message for current client connection
-        socket.emit('message', generateMessage(`Welcome, ${user.username}`));
+        socket.emit(
+            'message',
+            generateMessage(`Admin: Welcome, ${user.username}`)
+        );
 
         // Message broadcast when user joins the room (boradcast for everyone except current user)
         socket.broadcast
