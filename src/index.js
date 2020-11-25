@@ -30,7 +30,7 @@ app.use(express.static(publicDirectoryPath));
 io.on('connection', (socket) => {
     console.log('New WebSocket Connection');
 
-    // Join cht room
+    // Join chat room
     socket.on('join', (options, callback) => {
         const { error, user } = addUser({ id: socket.id, ...options });
 
@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
             .to(user.room)
             .emit(
                 'message',
-                generateMessage(`${user.username} has joined the room.`)
+                generateMessage(`Admin: ${user.username} has joined the room.`)
             );
 
         callback();
@@ -56,13 +56,18 @@ io.on('connection', (socket) => {
 
     // Send chat message
     socket.on('sendMessage', (message, callback) => {
+        const user = getUser(socket.id);
+
         const filter = new Filter();
         if (filter.isProfane(message)) {
-            return callback('Profanity is not allowed!');
+            return callback('Admin: Profanity is not allowed!');
         }
 
         // Send user's message to all connected users
-        io.to('cat').emit('message', generateMessage(message));
+        io.to(user.room).emit(
+            'message',
+            generateMessage(user.username, message)
+        );
 
         // Server side acknowledgment
         callback();
@@ -70,7 +75,11 @@ io.on('connection', (socket) => {
 
     // Send Location Details
     socket.on('sendLocation', (location, callback) => {
-        io.emit('locationMessage', generateLocationMessage(location));
+        const user = getUser(socket.id);
+        io.to(user.room).emit(
+            'locationMessage',
+            generateLocationMessage(user.username, location)
+        );
 
         // Server side acknowledgment
         callback();
@@ -83,7 +92,7 @@ io.on('connection', (socket) => {
         if (user) {
             io.to(user.room).emit(
                 'message',
-                generateMessage(`${user.username} left the chat!`)
+                generateMessage(`Admin: ${user.username} left the chat!`)
             );
         }
     });
