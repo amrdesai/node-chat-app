@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
         // Send welcome message for current client connection
         socket.emit(
             'message',
-            generateMessage(`Admin: Welcome, ${user.username}`)
+            generateMessage('Admin', `Welcome, ${user.username}`)
         );
 
         // Message broadcast when user joins the room (boradcast for everyone except current user)
@@ -51,7 +51,10 @@ io.on('connection', (socket) => {
             .to(user.room)
             .emit(
                 'message',
-                generateMessage(`Admin: ${user.username} has joined the room.`)
+                generateMessage(
+                    'Admin',
+                    `${user.username} has joined the room.`
+                )
             );
 
         callback();
@@ -95,7 +98,7 @@ io.on('connection', (socket) => {
         if (user) {
             io.to(user.room).emit(
                 'message',
-                generateMessage(`Admin: ${user.username} left the chat!`)
+                generateMessage('Admin', `${user.username} left the chat!`)
             );
         }
     });
