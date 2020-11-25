@@ -43,5 +43,11 @@ const removeUser = (id) => {
 };
 
 // getUser
+const getUser = (id) => {
+    return users.find((user) => user.id === id);
+};
 
 // getUsersInRoom
+const getUsersInRoom = (room) => {
+    return users.filter((user) => user.room === room);
+};
