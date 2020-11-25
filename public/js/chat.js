@@ -12,6 +12,7 @@ const messageTemplate = document.getElementById('message-template').innerHTML;
 const locationMessageTemplate = document.getElementById(
     'location-message-template'
 ).innerHTML;
+const sidebarTemplate = document.getElementById('sidebar-template').innerHTML;
 
 // Options
 const { username, room } = Qs.parse(location.search, {
@@ -20,7 +21,6 @@ const { username, room } = Qs.parse(location.search, {
 
 // Send message in chat
 socket.on('message', (message) => {
-    console.log(message);
     const html = Mustache.render(messageTemplate, {
         username: message.username,
         message: message.text,
@@ -31,13 +31,19 @@ socket.on('message', (message) => {
 
 // Send location in chat
 socket.on('locationMessage', (location) => {
-    console.log(location);
     const html = Mustache.render(locationMessageTemplate, {
         username: location.username,
         location: location.url,
         createdAt: moment(location.createdAt).format('h:mm A'),
     });
     messagesDiv.insertAdjacentHTML('beforeend', html);
+});
+
+//
+socket.on('roomData', ({ room, users }) => {
+    const html = Mustache.render(sidebarTemplate, { room, users });
+    const sidebarEl = document.getElementById('sidebar');
+    sidebarEl.innerHTML = html;
 });
 
 // Event Listener: Message element

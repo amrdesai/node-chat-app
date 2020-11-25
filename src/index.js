@@ -57,6 +57,12 @@ io.on('connection', (socket) => {
                 )
             );
 
+        // Update list of online users
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room),
+        });
+
         callback();
     });
 
@@ -98,8 +104,14 @@ io.on('connection', (socket) => {
         if (user) {
             io.to(user.room).emit(
                 'message',
-                generateMessage('Admin', `${user.username} left the chat!`)
+                generateMessage('Admin', `${user.username} has left!`)
             );
+
+            // Update list of online users
+            io.to(user.room).emit('roomData', {
+                room: user.room,
+                users: getUsersInRoom(user.room),
+            });
         }
     });
 });
